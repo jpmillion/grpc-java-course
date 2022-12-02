@@ -12,7 +12,10 @@ public class GreetingServer {
     public static void main(String[] args) throws IOException, InterruptedException {
         int port = 50051;
 
-        Server server = ServerBuilder.forPort(port).build();
+        Server server = ServerBuilder
+                .forPort(port)
+                .addService(new GreetingServerImpl())
+                .build();
 
         server.start();
         log.info("Server started, listening on port: {}", port);
