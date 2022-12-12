@@ -28,6 +28,10 @@ public class GreetingClient {
                 doGreet(channel);
                 break;
 
+            case "greetManyTimes":
+                doGreetManyTimes(channel);
+                break;
+
             default:
                 log.info("Keyword Invalid: " + args[0]);
         }
@@ -44,5 +48,16 @@ public class GreetingClient {
         GreetingResponse response = stub.greet(GreetingRequest.newBuilder().setFirstName("John").build());
 
         log.info("Greeting: {}", response.getResult());
+    }
+
+    private static void doGreetManyTimes(ManagedChannel channel) {
+
+        log.info("Enter doGreetManyTimes");
+
+        GreetingServiceGrpc.GreetingServiceBlockingStub stub = GreetingServiceGrpc.newBlockingStub(channel);
+
+        stub.greetManyTimes(GreetingRequest.newBuilder().setFirstName("John").build()).forEachRemaining(greetingResponse -> {
+            log.info(greetingResponse.getResult());
+        });
     }
 }
