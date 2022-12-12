@@ -6,7 +6,9 @@ option java_package = "com.proto.calculator";
 option java_multiple_files = true;
 
 import "calculator/calculate.proto";
+import "calculator/prime.proto";
 
 service CalculatorService {
   rpc calculate(CalculateRequest) returns (CalculateResponse);
+  rpc primeNumberDecomposition(PrimesRequest) returns (stream PrimesResponse);
 }

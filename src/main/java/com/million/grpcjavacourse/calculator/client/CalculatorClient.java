@@ -3,6 +3,7 @@ package com.million.grpcjavacourse.calculator.client;
 import com.proto.calculator.CalculateRequest;
 import com.proto.calculator.CalculateResponse;
 import com.proto.calculator.CalculatorServiceGrpc;
+import com.proto.calculator.PrimesRequest;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +31,10 @@ public class CalculatorClient {
                 doCalculate(channel);
                 break;
 
+            case "primeNumberDecomposition":
+                doPrimeNumberDecomposition(channel);
+                break;
+
             default:
                 log.info("Keyword Invalid: " + args[0]);
         }
@@ -54,5 +59,20 @@ public class CalculatorClient {
         CalculateResponse response = blockingStub.calculate(calculateRequest);
 
         log.info("Calculate: {}", response.getSum());
+    }
+
+    private static void doPrimeNumberDecomposition(ManagedChannel channel) {
+        log.info("Enter doPrimeNumberDecomposition");
+
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Enter Number to Decompose");
+        int numberToDecompose = scanner.nextInt();
+
+        PrimesRequest primesRequest = PrimesRequest.newBuilder().setNumber(numberToDecompose).build();
+
+        CalculatorServiceGrpc.CalculatorServiceBlockingStub stub = CalculatorServiceGrpc.newBlockingStub(channel);
+
+        stub.primeNumberDecomposition(primesRequest).forEachRemaining(primesResponse -> log.info("Prime: {}", primesResponse.getPrimeNumber()));
     }
 }
